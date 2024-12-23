@@ -16,7 +16,7 @@ SHOULD_BUILD_FOR_DEBUG = False
 
 
 NASSL_SETUP = {
-    "name": "nassl",
+    "name": "nassl-fork",
     "version": __version__,
     "packages": find_packages(exclude=["docs", "tests"]),
     "package_data": {"nassl": ["py.typed", "_nassl.pyi", "_nassl_legacy.pyi"]},
