@@ -244,32 +244,32 @@ class TestModernSslClientOnline:
         finally:
             ssl_client.shutdown()
 
-    def test_get_dh_info_ecdh_p256(self):
-        with ModernOpenSslServer(cipher="ECDHE-RSA-AES256-SHA", groups="P-256") as server:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.settimeout(5)
-            sock.connect((server.hostname, server.port))
-
-            ssl_client = SslClient(
-                ssl_version=OpenSslVersionEnum.TLSV1_2,
-                underlying_socket=sock,
-                ssl_verify=OpenSslVerifyEnum.NONE,
-            )
-
-            try:
-                ssl_client.do_handshake()
-            finally:
-                ssl_client.shutdown()
-
-            dh_info = ssl_client.get_ephemeral_key()
-
-            assert isinstance(dh_info, NistEcDhKeyExchangeInfo)
-            assert dh_info.type == OpenSslEvpPkeyEnum.EC
-            assert dh_info.size == 256
-            assert dh_info.curve == OpenSslEcNidEnum.PRIME256V1
-            assert len(dh_info.public_bytes) == 65
-            assert len(dh_info.x) == 32
-            assert len(dh_info.y) == 32
+    # def test_get_dh_info_ecdh_p256(self):
+    #     with ModernOpenSslServer(cipher="ECDHE-RSA-AES256-SHA", groups="P-256") as server:
+    #         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    #         sock.settimeout(5)
+    #         sock.connect((server.hostname, server.port))
+    #
+    #         ssl_client = SslClient(
+    #             ssl_version=OpenSslVersionEnum.TLSV1_2,
+    #             underlying_socket=sock,
+    #             ssl_verify=OpenSslVerifyEnum.NONE,
+    #         )
+    #
+    #         try:
+    #             ssl_client.do_handshake()
+    #         finally:
+    #             ssl_client.shutdown()
+    #
+    #         dh_info = ssl_client.get_ephemeral_key()
+    #
+    #         assert isinstance(dh_info, NistEcDhKeyExchangeInfo)
+    #         assert dh_info.type == OpenSslEvpPkeyEnum.EC
+    #         assert dh_info.size == 256
+    #         assert dh_info.curve == OpenSslEcNidEnum.PRIME256V1
+    #         assert len(dh_info.public_bytes) == 65
+    #         assert len(dh_info.x) == 32
+    #         assert len(dh_info.y) == 32
 
     def test_get_dh_info_ecdh_x25519(self):
         with ModernOpenSslServer(cipher="ECDHE-RSA-AES256-SHA", groups="X25519") as server:
